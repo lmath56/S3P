@@ -109,6 +109,7 @@ resource "google_container_cluster" "s3p-cluster" {
     logging_service = "logging.googleapis.com/kubernetes"
     monitoring_service = "monitoring.googleapis.com/kubernetes"
     networking_mode = "VPC_NATIVE"
+    deletion_protection = false
 
     node_locations = ["europe-west3-a", "europe-west3-b", "europe-west3-c"]
 

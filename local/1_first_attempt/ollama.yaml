@@ -1,0 +1,4 @@
+device: cuda
+model: llama3.2
+port: 11434
+workers: 1

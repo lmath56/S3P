@@ -210,21 +210,3 @@ resource "google_container_node_pool" "spot" {
         ]
     }
 }
-
-
-resource "google_service_account" "service-account" {
-    account_id = "service-account"
-    display_name = "Service Account"
-}
-
-resource "google_project_iam_member" "service-account" {
-    project = "optimal-carving-438111-h3"
-    role = "roles/storage.admin"
-    member = "serviceAccount:${google_service_account.service-account.email}"
-}
-
-resource "google_service_account_iam_member" "service-account" {
-    service_account_id = google_service_account.service-account.id
-    role = "roles/iam.workloadIdentityUser"
-    member = "serviceAccount:${optimal-carving-438111-h3.svc.id.goog}[default/service-account]"
-}

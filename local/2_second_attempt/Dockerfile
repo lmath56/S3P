@@ -9,8 +9,11 @@ RUN apt-get update && apt-get install -y \
 # Install transformers library 
 RUN pip3 install transformers
 
+# Install torch library
+RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu127
+
 # Install Flask 
-RUN pip3 install flask  # Comment out if not using Flask
+RUN pip3 install flask
 
 # Copy the pre-downloaded model
 COPY ./models /app/models
@@ -25,4 +28,4 @@ COPY entrypoint.py /app/entrypoint.py
 EXPOSE 5000
 
 # Run the entrypoint script
-CMD ["python", "/app/entrypoint.py"]
+CMD ["python3", "/app/entrypoint.py"]

@@ -1,10 +1,11 @@
-# Second Attempt Local
+# Third Attempt Local
 
-This folder contains some files that ChatGPT generated. 
+This folder contains some files that ChatGPT / Gemini / Copilot and I created. 
 What I want to achieve is a build a docker image that is able to build and be ready to accept prompts straight away.
 
 Uses:
 - Huggingface
+- Some model...
 
 Build: docker build -t hf-gpu .
 Replace hf-gpu with whatever you want to call the image.

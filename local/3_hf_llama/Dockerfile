@@ -11,8 +11,7 @@ RUN pip3 install transformers
 
 # Install required librarys for model
 # Torch library
-#RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu127
-
+RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu127
 # Safetensor library
 RUN pip3 install safetensors
 

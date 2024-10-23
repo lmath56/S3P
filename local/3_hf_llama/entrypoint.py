@@ -1,13 +1,12 @@
-import os
 import logging
 from flask import Flask, request, jsonify
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 print("Loading the model...")
-# Load the model
-model_name = "llama"
-model = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
-tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
+# Load the model from the local directory
+model_path = "./models/Phi-3.5-mini-instruct"
+model = AutoModelForCausalLM.from_pretrained(model_path)
+tokenizer = AutoTokenizer.from_pretrained(model_path)
 print("Model loaded successfully.")
 
 print("Configuring the logger...")

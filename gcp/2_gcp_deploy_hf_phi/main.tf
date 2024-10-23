@@ -12,58 +12,72 @@ terraform {
 }
 
 provider "google" {
-    project = "optimal-carving-438111-h3" # GCP project ID
-    region  = "europe-west3" 
+    project = var.project_id
+    region  = var.region
 }
 
 # Create storage bucket for model data https://cloud.google.com/storage/docs/terraform-create-bucket-upload-object
 resource "google_storage_bucket" "gcs_bucket" {
  name          = "model-data"
- location      = "europe-west3"
- storage_class = "STANDARD"
-
- uniform_bucket_level_access = true
+ location      = var.location
+ storage_class = "STANDARD" # https://cloud.google.com/storage/docs/storage-classes
+ uniform_bucket_level_access = true # https://cloud.google.com/storage/docs/uniform-bucket-level-access
 }
 
 # IAM permission to allow GKE nodes to access Google Storage via FUSE
-resource "google_project_iam_binding" "gke_storage_access" {
+resource "google_project_iam_binding" "gke_storage_access" { # Need to check if this is implemented correctly
   project = var.project_id
   role    = "roles/storage.objectViewer"
 
   members = [
-    "serviceAccount:${google_container_cluster.gke_cluster.node_config.service_account}",
+    "serviceAccount:${google_container_cluster.gke_cluster.node_config.service_account}", # Need to understand this, need to make an account before this?
   ]
 }
 
-
-
-resource "google_compute_instance" "vps_instance" {
-  name         = "vps-instance"
-  machine_type = "e2-medium"
-  zone         = "europe-west3"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-10"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {
-      // Ephemeral public IP
-    }
-  }
-}
-
-# Create the cluster
-resource "google_container_cluster" "autopilot_cluster" {
-  name     = "autopilot-cluster"
-  location = "europe-west3"
+# Create GKE Autopilot Cluster with GPU-enabled nodes
+resource "google_container_cluster" "gke_cluster" {
+  name     = "gke-autopilot-cluster"
+  location = var.location
+  node_locations = var.node_locations
   enable_autopilot = true
+  remove_default_node_pool = true 
+
+  # Optional: Network configuration (creates default VPC) # Do I want to do this or should I create a custom VPC?
+  network = google_compute_network.gke_network.id
+  subnetwork = google_compute_subnetwork.gke_subnet.id
 }
 
-# Create a node pool
+
+# https://cloud.google.com/kubernetes-engine/docs/quickstarts/create-cluster-using-terraform
+resource "google_compute_network" "default" {
+  name = "example-network"
+
+  auto_create_subnetworks  = false
+  enable_ula_internal_ipv6 = true # IPV6? Do I want this?
+}
+
+resource "google_compute_subnetwork" "default" {
+  name = "example-subnetwork"
+
+  ip_cidr_range = "10.0.0.0/16"
+  region        = "us-central1"
+
+  stack_type       = "IPV4_IPV6"
+  ipv6_access_type = "INTERNAL" # Change to "EXTERNAL" if creating an external loadbalancer  # IPV6? Do I want this? 
+
+  network = google_compute_network.default.id
+  secondary_ip_range {
+    range_name    = "services-range"
+    ip_cidr_range = "192.168.0.0/24"
+  }
+
+  secondary_ip_range { # Do I need this?
+    range_name    = "pod-ranges"
+    ip_cidr_range = "192.168.1.0/24"
+  }
+}
+
+# Create a node pool with GPU accelerators and preemptible instances (?)
 resource "google_container_node_pool" "node_pool" {
   name       = "node-pool"
   cluster    = google_container_cluster.autopilot_cluster.name
@@ -72,7 +86,7 @@ resource "google_container_node_pool" "node_pool" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-medium"
+    machine_type = "e2-medium" # Need to check these, how to add GPU?
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
@@ -80,25 +94,5 @@ resource "google_container_node_pool" "node_pool" {
   }
 
   }
-}
-
-resource "google_compute_http_health_check" "health_check" {
-  name               = "http-health-check"
-  request_path       = "/"
-  check_interval_sec = 5
-  timeout_sec        = 5
-  healthy_threshold  = 2
-  unhealthy_threshold = 2
-}
-
-resource "google_compute_target_pool" "target_pool" {
-  name         = "target-pool"
-  health_checks = [google_compute_http_health_check.health_check.self_link]
-}
-
-resource "google_compute_forwarding_rule" "http_forwarding_rule" {
-  name       = "http-forwarding-rule"
-  target     = google_compute_target_pool.target_pool.self_link
-  port_range = "80"
 }
 

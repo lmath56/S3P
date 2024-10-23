@@ -1,4 +1,5 @@
 import logging
+import torch
 from flask import Flask, request, jsonify
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -8,6 +9,11 @@ model_path = "./models/Phi-3.5-mini-instruct"
 model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 print("Model loaded successfully.")
+
+# Check if GPU is available and move the model to GPU
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model.to(device)
+print(f"Using device: {device}")
 
 print("Configuring the logger...")
 # Configure the logger
@@ -30,17 +36,14 @@ def chat():
         return jsonify({"error": "Missing prompt in request body"}), 400
 
     # Tokenize the input
-    inputs = tokenizer(user_input, return_tensors="pt")
+    inputs = tokenizer(user_input, return_tensors="pt").to(device)
     logging.debug("Tokenized input: %s", inputs)
 
     # Generate response from the model
     output = model.generate(
         **inputs,
         max_length=500,
-        num_return_sequences=1,
-        temperature=0.7,  # Adjust temperature for diversity
-        top_k=50,         # Use top-k sampling
-        top_p=0.95        # Use top-p (nucleus) sampling
+        num_return_sequences=1
     )
     response = tokenizer.decode(output[0], skip_special_tokens=True)
     logging.info("Generated response: %s", response)

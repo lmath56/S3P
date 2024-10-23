@@ -4,7 +4,17 @@ FROM nvidia/cuda:12.6.2-runtime-ubuntu22.04
 # Install dependencies
 RUN apt-get update && apt-get install -y \
   curl \
+  sudo \
   python3-pip
+
+# Configure NVIDIA Production repositories and install nvidia-container-toolkit as per https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+&& curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+RUN apt-get update && apt-get install -y \
+  nvidia-container-toolkit
 
 # Install transformers library 
 RUN pip3 install transformers

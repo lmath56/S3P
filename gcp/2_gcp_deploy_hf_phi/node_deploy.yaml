@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-app
+  template:
+    metadata:
+      labels:
+        app: ai-app
+    spec:
+      containers:
+      - name: ai-container
+        image: gcr.io/<your-project-id>/ai-model-image:latest
+        volumeMounts:
+        - name: gcs-bucket
+          mountPath: /mnt/ai-model
+      volumes:
+      - name: gcs-bucket
+        flexVolume:
+          driver: "gcsfuse"
+          options:
+            bucketName: "ai-model-bucket"
+            mountDir: "/mnt/ai-model"

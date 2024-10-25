@@ -9,7 +9,21 @@ The project revolves around the below:
 - Using Terraform to deploy AI workloads to GKE
 - Autoscaling AI workloads in GKE
 
-I will continue adding more to this repository including updating the Readme.
+## Repository Structure
 
+The repository is organized into the following main folders:
 
+### `local`
+
+The `local` folder contains scripts, configurations, and resources needed to run AI workloads on your local machine. This includes:
+- Dockerfiles for building local AI service images
+- Kubernetes manifests for local deployment
+- Scripts for setting up and running AI services locally
+
+### `gcp`
+
+The `gcp` folder contains Terraform configurations and Kubernetes manifests for deploying AI workloads to Google Cloud Platform (GCP). This includes:
+- Terraform scripts for provisioning GKE clusters and other necessary infrastructure
+- Kubernetes manifests for deploying AI services to GKE
+- Configuration files for autoscaling AI workloads in GKE
 

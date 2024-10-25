@@ -86,7 +86,7 @@ resource "google_compute_subnetwork" "gke_subnet" {
 resource "google_container_cluster" "gke_cluster" {
   name     = "gke-hf-phi"
   location = "europe-west3"
-  node_locations = ["europe-west3-a", "europe-west3-b", "europe-west3-c"]
+  node_locations = ["europe-west3-a", "europe-west3-b"]
   enable_autopilot = true # This will mean that Google will manage the nodes
   enable_tpu = false
   initial_node_count = 0
@@ -110,7 +110,3 @@ resource "google_container_cluster" "gke_cluster" {
   }
 }
 
-# Output the cluster name
-output "cluster_name" {
-  value = google_container_cluster.gke_cluster.name
-}

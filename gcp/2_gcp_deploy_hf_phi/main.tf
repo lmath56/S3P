@@ -81,27 +81,17 @@ resource "google_compute_subnetwork" "gke_subnet" {
   network       = google_compute_network.gke_network.id
 }
 
-
-# Create GKE Autopilot Cluster with GPU-enabled nodes
+# Create GKE Standard Cluster
 resource "google_container_cluster" "gke_cluster" {
-  name     = "gke-hf-phi"
-  location = "europe-west3"
-  node_locations = ["europe-west3-a", "europe-west3-b"]
-  enable_autopilot = true # This will mean that Google will manage the nodes
-  enable_tpu = false
-  initial_node_count = 0
-  network = google_compute_network.gke_network.name
-  subnetwork = google_compute_subnetwork.gke_subnet.name
+  name        = "gke-hf-phi"
+  location    = "europe-west3-b"
+  initial_node_count = 1
+  network            = google_compute_network.gke_network.name
+  subnetwork         = google_compute_subnetwork.gke_subnet.name
   deletion_protection = false
 
   workload_identity_config {
     workload_pool = "optimal-carving-438111-h3.svc.id.goog"
-  }
-  
-  node_config {
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
   }
   addons_config {
     gcs_fuse_csi_driver_config { # Enable GCS FUSE CSI driver https://github.com/GoogleCloudPlatform/gcs-fuse-csi-driver/blob/main/docs/terraform.md
@@ -110,3 +100,23 @@ resource "google_container_cluster" "gke_cluster" {
   }
 }
 
+# Create a node pool with NVIDIA T4 GPUs
+resource "google_container_node_pool" "gpu_node_pool" {
+  cluster    = google_container_cluster.gke_cluster.name
+  location   = "europe-west3-b"
+  node_count = 1
+
+  node_config {
+    machine_type = "n1-standard-4"
+    guest_accelerator {
+      type  = "nvidia-tesla-t4"
+      count = 1
+    }
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform",
+    ]
+  }
+}

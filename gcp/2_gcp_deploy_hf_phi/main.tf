@@ -52,6 +52,7 @@ resource "google_storage_bucket" "gcs_bucket" {
  location      = "europe-west3" 
  storage_class = "STANDARD" # https://cloud.google.com/storage/docs/storage-classes
  uniform_bucket_level_access = true # https://cloud.google.com/storage/docs/uniform-bucket-level-access
+
 }
 
 # IAM permission to allow GKE nodes to access Google Storage 
@@ -70,6 +71,7 @@ resource "google_compute_network" "gke_network" {
   name                    = "gke-network"
   auto_create_subnetworks = false
   depends_on = [google_project_service.compute_api]  # Ensure Compute Engine API is enabled
+
 }
 
 resource "google_compute_subnetwork" "gke_subnet" {
@@ -86,9 +88,11 @@ resource "google_container_cluster" "gke_cluster" {
   location = "europe-west3"
   node_locations = ["europe-west3-a", "europe-west3-b", "europe-west3-c"]
   enable_autopilot = true # This will mean that Google will manage the nodes
-
+  enable_tpu = false
+  initial_node_count = 0
   network = google_compute_network.gke_network.name
   subnetwork = google_compute_subnetwork.gke_subnet.name
+  deletion_protection = false
 
   workload_identity_config {
     workload_pool = "optimal-carving-438111-h3.svc.id.goog"

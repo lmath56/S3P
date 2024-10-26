@@ -25,7 +25,7 @@ spec:
             nvidia.com/gpu: 1
         volumeMounts:
         - name: gcs-bucket
-          mountPath: /mnt/models
+          mountPath: /app/models
       volumes:
       - name: gcs-bucket
         csi:

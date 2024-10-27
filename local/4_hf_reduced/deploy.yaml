@@ -14,16 +14,16 @@ spec:
     spec:
       containers:
       - name: ai-container
-        image: europe-west3-docker.pkg.dev/optimal-carving-438111-h3/gcp-hf-gpu/gcp-hf-gpu:latest
+        image: reduced
         resources:
           limits:
-            cpu: 100m
-            memory: 8192Mi
+            cpu: 5000m
+            memory: 1000Mi
         volumeMounts:
         - name: local-storage
           mountPath: /app/models
       volumes:
       - name: local-storage
         hostPath:
-          path: /path/to/local/models
+          path: /c/code/S3P/models/HF-Phi
           type: Directory

@@ -5,7 +5,7 @@ What I want to achieve is a build a docker image that is able to build and be re
 
 Uses:
 - Huggingface
-- [Phi-3.5-nini-instruct](https://huggingface.co/microsoft/Phi-3.5-mini-instruct)
+- [Phi-3.5-mini-instruct](https://huggingface.co/microsoft/Phi-3.5-mini-instruct)
 
 
 # Build the Docker image

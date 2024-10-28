@@ -15,15 +15,19 @@ spec:
       containers:
       - name: ai-container
         image: reduced
+        imagePullPolicy: Never # If this is not here K8s will try and pull the container from a registry
         resources:
           limits:
-            cpu: 5000m
-            memory: 1000Mi
+            cpu: 1000m
+            memory: 10000Mi
+            nvidia.com/gpu: 1
+        ports:
+        - containerPort: 5000
         volumeMounts:
-        - name: local-storage
+        - name: local-storage 
           mountPath: /app/models
       volumes:
       - name: local-storage
         hostPath:
-          path: /c/code/S3P/models/HF-Phi
+          path: /models
           type: Directory

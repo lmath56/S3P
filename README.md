@@ -39,7 +39,7 @@ To run a Docker container in Minikube, follow these steps:
 
 1. Set the CPU and memory for Minikube:
     ```sh
-    minikube config set cpu 8
+    minikube config set cpus 8
     minikube config set memory 16384
     ```
 

@@ -77,24 +77,24 @@ Before building the Docker image, you need to download the model from Hugging Fa
 
 ## Build the Docker Image
 
-1. Build the Docker image:
-    ```sh
-    docker build -t hf-gpu .
-    ```
+Build the Docker image:
+```sh
+docker build -t hf-gpu .
+```
 
-    Replace `hf-gpu` with whatever you want to call the image.
+Replace `hf-gpu` with whatever you want to call the image.
 
 ## Run the Docker Container
 
-1. Run the Docker container:
-    ```sh
-    docker run -p 5000:5000 --gpus all hf-gpu
-    ```
+Run the Docker container:
+```sh
+docker run -p 5000:5000 --gpus all hf-gpu
+```
 
 ## Make a Request to the Running Container
 
 
-1. Use `curl` to make a POST request to the running container:
+Use `curl` to make a POST request to the running container:
 
 ```sh
 curl -X POST http://localhost:5000/chat -H "Content-Type: application/json" -d '{"prompt": "How hot is the sun."}'
@@ -123,3 +123,75 @@ Now your Docker container will use the new model for generating responses.
 
 > [!NOTE]  
 > Not all models are compatible, so changes to prerequisites, drivers, or the entrypoint.py file may be needed.
+
+
+## Running in Minikube
+
+To run the Docker container in Minikube, follow these steps:
+
+### Configure Minikube
+
+1. Set the CPU and memory for Minikube:
+    ```sh
+    minikube config set cpu 8
+    minikube config set memory 16384
+    ```
+
+2. Start Minikube with GPU support and Docker driver:
+    ```sh
+    minikube start --driver=docker --gpus=all
+    ```
+
+### Build and Load the Docker Image
+
+1. Build the Docker image:
+    ```sh
+    docker build -t hf-gpu .
+    ```
+
+2. Load the Docker image into Minikube:
+    ```sh
+    minikube image load hf-gpu
+    ```
+
+### Mount Local Directory
+
+Mount the local directory containing the models to Minikube:
+```sh
+minikube mount C:\code\S3P\models\HF-Phi:/models
+```
+
+### Deploy to Minikube
+
+Apply the Kubernetes deployment and service configuration:
+```sh
+kubectl apply -f deploy.yaml
+kubectl apply -f service.yaml
+```
+
+### Access the Service
+
+Use Minikube to access the service:
+```sh
+minikube service ai-service
+```
+
+### Access Logs
+
+To access the logs of the running pod:
+```sh
+kubectl logs <pod-name>
+```
+Replace `<pod-name>` with the name of your pod. You can get the pod name by running:
+```sh
+kubectl get pods
+```
+
+### Clean Up
+
+When you are done, you can delete the Minikube cluster:
+```sh
+minikube delete
+```
+
+By following these steps, you can run your Docker container in Minikube with GPU support and access it through a Kubernetes service.

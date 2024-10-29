@@ -11,7 +11,7 @@ The project revolves around the below:
 
 ## Repository Structure
 
-The repository is organized into the following main folders:
+The repository is organized into the following folders:
 
 ### `local`
 
@@ -27,7 +27,86 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
 - Kubernetes manifests for deploying AI services to GKE
 - Configuration files for autoscaling AI workloads in GKE
 
-## **GKE Cluster with GPU Node Pool**
+# Useful Commands
+
+## Minikube
+
+[Minikube](https://minikube.sigs.k8s.io/docs/) is local Kubernetes, focusing on making it easy to learn and develop for Kubernetes.
+
+To run a Docker container in Minikube, follow these steps:
+
+### Configure and Start Minikube
+
+1. Set the CPU and memory for Minikube:
+    ```sh
+    minikube config set cpu 8
+    minikube config set memory 16384
+    ```
+
+2. Start Minikube with GPU support and Docker driver:
+    ```sh
+    minikube start --driver=docker --gpus=all
+    ```
+
+### Build and Load the Docker Image
+
+1. Build the Docker image if it is not already:
+    ```sh
+    docker build -t hf-gpu .
+    ```
+
+2. Load the Docker image into Minikube:
+    ```sh
+    minikube image load hf-gpu
+    ```
+
+### Mount Local Directory
+
+Mount a local directory containing the models to Minikube:
+```sh
+minikube mount C:\code\S3P\models\HF-Phi:/models
+```
+This is best done on a new terminal window as it must stay active while mounted.
+
+> [!NOTE]  
+> Additional config is required in the Kubernetes deployment.yaml file to mount this to the pod.
+
+### Deploy to Minikube
+
+Apply the Kubernetes deployment and service configuration:
+```sh
+kubectl apply -f deploy.yaml
+kubectl apply -f service.yaml
+```
+
+### Access the Service
+
+Use Minikube to access the service:
+```sh
+minikube service ai-service
+```
+
+### Access Logs
+
+To access the logs of the running pod:
+```sh
+kubectl logs <pod-name>
+```
+Replace `<pod-name>` with the name of your pod. You can get the pod name by running:
+```sh
+kubectl get pods
+```
+
+### Clean Up
+
+When you are done, you can delete the Minikube cluster:
+```sh
+minikube delete
+```
+
+By following these steps, you can run your Docker container in Minikube with GPU support and access it through a Kubernetes service.
+
+## Terraform
 
 ### **Prerequisites:**
 
@@ -37,23 +116,15 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
 
 ### **Setup:**
 
-1. **Clone this Repository:**
+ [Terraform](https://www.terraform.io/) is an infrastructure as code tool that enables you to safely and predictably provision and manage infrastructure in any cloud.
 
-   ```bash
-   git clone https://github.com/lmath56/S3P.git
-   cd S3P
-   ```
-
-> [!NOTE]  
-> S3P = Semester 3 Personal (project)
-
-2. **Initialise Terraform:**
+1. **Initialise Terraform:**
 
    ```bash
    terraform init
    ```
 
-3. **Configure Terraform:**
+2. **Configure Terraform:**
 
    Set up your Google Cloud credentials using `gcloud auth configure`. Ensure the `project` and `region` variables in the `provider "google"` block are set correctly. For example:
 
@@ -61,7 +132,7 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
     gcloud container clusters get-credentials gke-hf-phi --region europe-west3
     ```
     
-4. **Plan and Apply Infrastructure:**
+3. **Plan and Apply Infrastructure:**
 
    ```bash
    terraform plan
@@ -87,15 +158,16 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
   terraform destroy
   ```
 
-  
+## Kubectl
 
-# Using `kubectl` to Manage Your GKE Cluster
+[`kubectl`](https://kubernetes.io/docs/reference/kubectl/) is a command-line tool used to communicate with Kubernetes clusters. It allows you to manage and inspect cluster resources, such as pods, services, deployments, and more.
 
-`kubectl` is a command-line tool used to communicate with Kubernetes clusters. It allows you to manage and inspect cluster resources, such as pods, services, deployments, and more.
-
-## Basic Usage
+### Authenticating with GKE
 
 To interact with your GKE cluster, you'll need to authenticate your `kubectl` client. This can be done using `gcloud` or by setting up service account authentication.
+```bash
+gcloud container clusters get-credentials gke-hf-phi --region europe-west3
+```
 
 ### Common `kubectl` Commands
 
@@ -130,14 +202,6 @@ kubectl delete deployment <deployment-name>
 #### Apply Configuration:
 ```bash
 kubectl apply -f my-manifest.yaml
-```
-
-### Authenticating with GKE
-
-To authenticate with your GKE cluster, use the following command:
-
-```bash
-gcloud container clusters get-credentials gke-hf-phi --region europe-west3
 ```
 
 This command will configure your kubectl client to use the correct credentials to interact with your cluster.

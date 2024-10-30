@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pytorch-xla-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pytorch-xla-app
+  template:
+    metadata:
+      labels:
+        app: pytorch-xla-app
+      annotations:
+        # Add necessary annotations for TPU support
+        cloud-tpus.google.com/preemptible: "true"
+    spec:
+      containers:
+      - name: pytorch-xla-app
+        image: gcr.io/your-project-id/pytorch-xla-app
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cloud-tpus.google.com/v2: 8
+            cpu: "4"           # Specify CPU limit
+            memory: "8Gi"      # Specify memory limit
+          requests:
+            cpu: "2"           # Specify CPU request
+            memory: "4Gi"      # Specify memory request
+        volumeMounts:
+        - name: fuse-mount
+          mountPath: /mnt/fuse
+      volumes:
+      - name: fuse-mount
+        hostPath:
+          path: /mnt/fuse
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pytorch-xla-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: pytorch-xla-app

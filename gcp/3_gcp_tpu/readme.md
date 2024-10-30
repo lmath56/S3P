@@ -58,7 +58,7 @@ Before you begin, ensure you have the following installed:
 
 ### 4. Deploy to GKE
 
-1. Update the `deployment.yaml` file with your project ID and other necessary details.
+1. Update the `deploy.yaml` file with your project ID and other necessary details.
 
 2. Apply the Kubernetes deployment:
     ```sh

@@ -9,7 +9,7 @@ terraform {
 
 provider "google" {
   project = "optimal-carving-438111-h3"
-  region  = "europe-west3"
+  region  = "europe-west4"
 }
 
 # Enable required APIs for GKE cluster
@@ -52,7 +52,7 @@ resource "google_service_account" "gke_service_account" {
 # Create storage bucket for model data
 resource "google_storage_bucket" "gcs_bucket" {
   name                        = "s3-model-data-oc"
-  location                    = "europe-west3"
+  location                    = "europe-west4"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
 }
@@ -77,14 +77,14 @@ resource "google_compute_network" "gke_network" {
 resource "google_compute_subnetwork" "gke_subnet" {
   name          = "gke-subnet"
   ip_cidr_range = "10.0.0.0/16"
-  region        = "europe-west3"
+  region        = "europe-west4"
   network       = google_compute_network.gke_network.id
 }
 
 # Create GKE Standard Cluster
 resource "google_container_cluster" "gke_cluster" {
   name                = "gke-hf-phi"
-  location            = "europe-west3-b"
+  location            = "europe-west4-a"
   initial_node_count  = 1
   network             = google_compute_network.gke_network.name
   subnetwork          = google_compute_subnetwork.gke_subnet.name
@@ -101,37 +101,16 @@ resource "google_container_cluster" "gke_cluster" {
   }
 }
 
-# Create a node pool with NVIDIA T4 GPUs
-resource "google_container_node_pool" "gpu_node_pool" {
-  cluster    = google_container_cluster.gke_cluster.name
-  location   = "europe-west3-b"
-  node_count = 1
-
-  node_config {
-    machine_type = "n1-standard-4"
-    guest_accelerator {
-      type  = "nvidia-tesla-t4"
-      count = 1
-    }
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
-  }
-}
-
 # Create a node pool with TPUs
 resource "google_container_node_pool" "tpu_node_pool" {
   cluster    = google_container_cluster.gke_cluster.name
-  location   = "europe-west3-b"
+  location   = "europe-west4-a"
   node_count = 1
 
   node_config {
     machine_type = "n1-standard-4"
     guest_accelerator {
-      type  = "tpu-v2"
+      type  = "tpu-v3"
       count = 8
     }
     workload_metadata_config {

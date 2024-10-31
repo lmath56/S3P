@@ -19,16 +19,13 @@ resource "google_container_node_pool" "tpu_node_pool" {
   node_count = 1
 
   node_config {
-    machine_type = "n1-standard-4"
-    guest_accelerator {
-      type  = "v3-8"
-      count = 1
-    }
+    machine_type = "ct5lp-hightpu-1t"
+    
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
-  }
+ }
 }

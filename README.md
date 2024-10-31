@@ -205,3 +205,6 @@ kubectl apply -f my-manifest.yaml
 ```
 
 This command will configure your kubectl client to use the correct credentials to interact with your cluster.
+
+## Google Cloud Platform 
+ `gcloud compute accelerator-types list --filter="zone:( europe-west4-b )"`

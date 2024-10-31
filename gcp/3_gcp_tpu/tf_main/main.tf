@@ -100,24 +100,3 @@ resource "google_container_cluster" "gke_cluster" {
     }
   }
 }
-
-# Create a node pool with TPUs
-resource "google_container_node_pool" "tpu_node_pool" {
-  cluster    = google_container_cluster.gke_cluster.name
-  location   = "europe-west4-a"
-  node_count = 1
-
-  node_config {
-    machine_type = "n1-standard-4"
-    guest_accelerator {
-      type  = "tpu-v3"
-      count = 8
-    }
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
-  }
-}

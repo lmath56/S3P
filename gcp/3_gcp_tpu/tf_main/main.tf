@@ -7,6 +7,7 @@ terraform {
   }
 }
 
+
 provider "google" {
   project = "optimal-carving-438111-h3"
   region  = "europe-west4"
@@ -43,30 +44,6 @@ resource "google_project_service" "tpu_api" {
   disable_on_destroy  = false
 }
 
-# Create a service account for cluster to access Google Storage
-resource "google_service_account" "gke_service_account" {
-  account_id   = "gke-service-account"
-  display_name = "GKE Service Account"
-}
-
-# Create storage bucket for model data
-resource "google_storage_bucket" "gcs_bucket" {
-  name                        = "s3-model-data-oc"
-  location                    = "europe-west4"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = true
-}
-
-# IAM permission to allow GKE nodes to access Google Storage
-resource "google_project_iam_binding" "gke_storage_access" {
-  project = "optimal-carving-438111-h3"
-  role    = "roles/storage.objectViewer"
-
-  members = [
-    "serviceAccount:${google_service_account.gke_service_account.email}",
-  ]
-}
-
 # Create VPC network and subnet for GKE cluster
 resource "google_compute_network" "gke_network" {
   name                    = "gke-network"
@@ -89,6 +66,7 @@ resource "google_container_cluster" "gke_cluster" {
   network             = google_compute_network.gke_network.name
   subnetwork          = google_compute_subnetwork.gke_subnet.name
   deletion_protection = false
+  remove_default_node_pool = true
 
   workload_identity_config {
     workload_pool = "optimal-carving-438111-h3.svc.id.goog"

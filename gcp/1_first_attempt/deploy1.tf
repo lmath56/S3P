@@ -5,8 +5,8 @@ provider "google" {
 
 terraform {
     backend "gcs" {
-        bucket  = "s3p-tf-state"
-        prefix  = "terraform/state"
+        bucket  = "s3p_terraform_state"
+        prefix  = "terraform/state/1_first_attempt"
     }
 }
 

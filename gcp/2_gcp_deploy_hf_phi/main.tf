@@ -5,6 +5,11 @@ terraform {
       version = "6.8.0"
         }
     }
+  backend "gcs" {
+    bucket = "s3p_terraform_state"
+    prefix = "terraform/state/2_gcp_deploy_hf_phi"
+  }
+    
 }
 
 provider "google" {

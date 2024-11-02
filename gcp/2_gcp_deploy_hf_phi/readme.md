@@ -4,3 +4,6 @@ This directory contains the files for the second attempt. It should deploy /loca
 
 First a storage bucket needs to be created in GCS, to store the Terraform state.
 
+## Progression
+
+Work has stopped with this attempt as GPUs needed to be enabled for my GCP account. 

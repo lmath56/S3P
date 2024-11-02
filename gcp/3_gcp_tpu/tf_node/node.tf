@@ -5,12 +5,8 @@ terraform {
       version = "6.8.0"
     }
   }
-}
-
-
-terraform {
   backend "gcs" {
-    bucket = "terraform_state"
+    bucket = "s3p_terraform_state"
     prefix = "terraform/state/3_gcp_tpu_node"
   }
 }

@@ -5,20 +5,16 @@ terraform {
       version = "6.8.0"
     }
   }
-}
-
-provider "google" {
-  project = "optimal-carving-438111-h3"
-  region  = "europe-west4"
-}
-
-terraform {
   backend "gcs" {
     bucket = "s3p_terraform_state"
     prefix = "terraform/state/3_gcp_tpu_cluster"
   }
 }
 
+provider "google" {
+  project = "optimal-carving-438111-h3"
+  region  = "europe-west4"
+}
 
 # Enable required APIs for GKE cluster
 resource "google_project_service" "compute_api" {

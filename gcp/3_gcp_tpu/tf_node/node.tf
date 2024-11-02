@@ -7,20 +7,6 @@ terraform {
   }
 }
 
-resource "google_storage_bucket" "terraform_state" {
-  name          = "terraform_state"
-  location      = "europe-west4"
-  force_destroy = false
-  lifecycle {
-    prevent_destroy = true
-  ignore_changes = [
-      name,
-      location,
-      storage_class,
-      uniform_bucket_level_access,
-    ]
-  }
-}
 
 terraform {
   backend "gcs" {

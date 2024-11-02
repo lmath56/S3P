@@ -11,31 +11,25 @@ spec:
     metadata:
       labels:
         app: pytorch-xla-app
-      annotations:
-        # Add necessary annotations for TPU support
-        cloud-tpus.google.com/preemptible: "true"
     spec:
       containers:
       - name: pytorch-xla-app
-        image: gcr.io/your-project-id/pytorch-xla-app
+        image: europe-west3-docker.pkg.dev/optimal-carving-438111-h3/s3p-gcp-k8s/3-gcp-tpu:latest
         ports:
         - containerPort: 5000
         resources:
           limits:
-            cloud-tpus.google.com/v2: 8
-            cpu: "4"           # Specify CPU limit
-            memory: "8Gi"      # Specify memory limit
+            cpu: "4"           # Adjust CPU limit
+            memory: "16Gi"     # Adjust memory limit
           requests:
-            cpu: "2"           # Specify CPU request
-            memory: "4Gi"      # Specify memory request
+            cpu: "2"           # Adjust CPU request
+            memory: "8Gi"      # Adjust memory request
         volumeMounts:
         - name: fuse-mount
-          mountPath: /mnt/fuse
+          mountPath: /app/models
       volumes:
       - name: fuse-mount
-        hostPath:
-          path: /mnt/fuse
-          type: Directory
+        emptyDir: {} 
 ---
 apiVersion: v1
 kind: Service

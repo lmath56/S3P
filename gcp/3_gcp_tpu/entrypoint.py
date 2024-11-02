@@ -18,9 +18,14 @@ except Exception as e:
 print("Loading the model...")
 # Load the model from the local directory
 model_path = "/app/models"
-model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-print("Model loaded successfully.")
+model = None
+tokenizer = None
+try:
+    model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    print("Model loaded successfully.")
+except Exception as e:
+    print(f"Error loading model: {e}")
 
 print("Configuring the logger...")
 # Configure the logger

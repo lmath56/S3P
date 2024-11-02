@@ -27,6 +27,8 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
 - Kubernetes manifests for deploying AI services to GKE
 - Configuration files for autoscaling AI workloads in GKE
 
+Each of these folders contains numbered folders containging different attempts.s
+
 # Useful Commands
 
 ## Minikube

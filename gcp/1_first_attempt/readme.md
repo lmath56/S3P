@@ -6,3 +6,8 @@ deploy1.tf is the main file, which should work on it's own (after setting the co
 
 
 Most of this was created by following [Anton Putra -  How to Create GKE Cluster Using TERRAFORM? (Google Kubernetes Engine & Workload Identity)](https://youtu.be/X_IK0GBbBTw)
+
+
+## Progression
+
+This deploys a simple cluster. After this was working as per the guide, a new attempt folder was created for the next steps.

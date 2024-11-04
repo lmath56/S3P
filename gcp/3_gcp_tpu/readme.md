@@ -100,4 +100,4 @@ If the pods are not running correctly, check the logs:
 
 ## Progression
 
-This is still a work in progress. Currently the Google account used does not have 
+This is still a work in progress. Currently the Google account used does not have enough quota.

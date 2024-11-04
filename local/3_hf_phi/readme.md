@@ -119,3 +119,7 @@ Now your Docker container will use the new model for generating responses.
 
 > [!NOTE]  
 > Not all models are compatible, so changes to prerequisites, drivers, or the entrypoint.py file may be needed.
+
+## Progression
+
+This works; however the image is quite large; aroud 8GB. The next attempt aims to reduce this size. 

@@ -9,4 +9,7 @@ Uses:
 
 To run: docker run -p 11434:11434 --gpus all ollama-gpu serve
 
-This did not get completed as I had decided to try Huggingface instead of Ollama, see 2_second_attempt
+## Progression
+
+This did not get completed as I had decided to try Huggingface instead of Ollama, see 2_second_attempt.
+This was due to there being more documentation on Huggingface available.

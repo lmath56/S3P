@@ -195,3 +195,7 @@ minikube delete
 ```
 
 By following these steps, you can run your Docker container in Minikube with GPU support and access it through a Kubernetes service.
+
+## Progression
+
+This works, however the size of this image is not much better. Further progression is made in gcp/3_gcp_tpu

@@ -27,7 +27,8 @@ The `gcp` folder contains Terraform configurations and Kubernetes manifests for 
 - Kubernetes manifests for deploying AI services to GKE
 - Configuration files for autoscaling AI workloads in GKE
 
-Each of these folders contains numbered folders containging different attempts.s
+Each of these folders contains numbered folders containging different attempts.
+Each will contain a `readme.md` file explaining the contents of that directory.
 
 # Useful Commands
 
@@ -110,6 +111,8 @@ By following these steps, you can run your Docker container in Minikube with GPU
 
 ## Terraform
 
+ [Terraform](https://www.terraform.io/) is an infrastructure as code tool that enables you to safely and predictably provision and manage infrastructure in any cloud.
+
 ### **Prerequisites:**
 
 * A Google Cloud Platform (GCP) project with billing enabled.
@@ -117,8 +120,6 @@ By following these steps, you can run your Docker container in Minikube with GPU
 * Terraform installed and configured.
 
 ### **Setup:**
-
- [Terraform](https://www.terraform.io/) is an infrastructure as code tool that enables you to safely and predictably provision and manage infrastructure in any cloud.
 
 1. **Initialise Terraform:**
 

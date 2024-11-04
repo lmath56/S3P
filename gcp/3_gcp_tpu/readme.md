@@ -97,3 +97,7 @@ If the pods are not running correctly, check the logs:
     kubectl logs <pod-name>
     ```
     - Ensure that the TPU nodes are correctly configured and available.
+
+## Progression
+
+This is still a work in progress. Currently the Google account used does not have 

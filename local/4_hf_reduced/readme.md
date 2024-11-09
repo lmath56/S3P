@@ -21,7 +21,17 @@ Uses:
 Replace ```hf-gpu``` with whatever you want to call the image.
 
 ### Run the Docker container
-```docker run -p 5000:5000 --gpus all hf-gpu```
+```sh
+docker run -p 5000:5000 --gpus all -v C:\code\S3P\models\HF-Phi:/app/models hf-gpu
+```
+
+> [!NOTE]  
+> Either a local directory needs to be bound to /app/models, or a model is copied into the image when building.
+> To do this, add the below to the Dockerfile before building: 
+> ```sh
+> # Copy the entrypoint script
+> COPY C:\code\S3P\models\HF-Phi /app/models
+> ```
 
 ### Make a request to the running container
 ```curl -X POST http://localhost:5000/chat -H "Content-Type: application/json" -d '{"prompt": "How hot is the sun."}'```
@@ -54,27 +64,6 @@ Replace ```hf-gpu``` with whatever you want to call the image.
 If the above command shows the GPU details, your setup is correctly utilizing the GPU.
 
 
-## Download the Model from Hugging Face
-
-Before building the Docker image, you need to download the model from Hugging Face.
-
-1. Install the `transformers` library if you haven't already:
-    ```sh
-    pip install transformers
-    ```
-
-2. Download the model:
-    ```python
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-
-    model_name = "microsoft/Phi-3.5-mini-instruct"
-    model = AutoModelForCausalLM.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-    model.save_pretrained("./models")
-    tokenizer.save_pretrained("./models")
-    ```
-
 ## Build the Docker Image
 
 Build the Docker image:
@@ -88,7 +77,7 @@ Replace `hf-gpu` with whatever you want to call the image.
 
 Run the Docker container:
 ```sh
-docker run -p 5000:5000 --gpus all hf-gpu
+docker run -p 5000:5000 --gpus all -v C:\code\S3P\models\HF-Phi:/app/models hf-gpu
 ```
 
 ## Make a Request to the Running Container

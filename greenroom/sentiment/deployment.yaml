@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: greenroom-sentiment
 spec:
-  replicas: 3 
+  replicas: 10
   selector:
     matchLabels:
       app: greenroom-sentiment
@@ -19,11 +19,11 @@ spec:
         - containerPort: 5000
         resources:
           requests:
-            cpu: "200m"
-            memory: "512Mi"
-          limits:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "2Gi"
+          limits:
+            cpu: "1000m"
+            memory: "4Gi"
 ---
 apiVersion: v1
 kind: Service

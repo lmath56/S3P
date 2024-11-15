@@ -22,7 +22,7 @@ This project uses Locust to perform load testing on an endpoint that processes e
 ## Usage
 1. Run Locust:
 
-    ```locust -f load_emotions.py --host=http://127.0.0.1:5005```
+    ```locust -f load_emotions.py```
 
 2. Open the Locust web interface: 
 Open a web browser and go to http://localhost:8089
@@ -31,7 +31,7 @@ Open a web browser and go to http://localhost:8089
 
 - Number of total users to simulate
 - Spawn rate (users per second)
-- Host (should already be set to http://127.0.0.1:5005)
+- Set the host. Note that the load_sentiment.py file is already targeting /get-emotion-batch
 
 4. Start the test:
 Click the "Start swarming" button to begin the load test.

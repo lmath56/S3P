@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greenroom-sentiment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: greenroom-sentiment
+  template:
+    metadata:
+      labels:
+        app: greenroom-sentiment
+    spec:
+      containers:
+      - name: greenroom-sentiment
+        image: gcr.io/YOUR_PROJECT_ID/greenroom-sentiment:latest
+        ports:
+        - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: greenroom-sentiment
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5001
+  selector:
+    app: greenroom-sentiment

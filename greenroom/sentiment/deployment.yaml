@@ -14,9 +14,16 @@ spec:
     spec:
       containers:
       - name: greenroom-sentiment
-        image: gcr.io/YOUR_PROJECT_ID/greenroom-sentiment:latest
+        image: gcr.io/optimal-carving-438111-h3/greenroom-sentiment:latest
         ports:
         - containerPort: 5001
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
@@ -25,7 +32,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+  - port: 8080
     targetPort: 5001
   selector:
     app: greenroom-sentiment

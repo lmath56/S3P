@@ -7,7 +7,7 @@ This project uses Locust to perform load testing on an endpoint that processes e
 1.  Clone the repository:
     ```sh
     git clone <repository-url>
-    cd greenroom\locust
+    cd greenroom\ai_emotions\locust
     ```
 2.  Create a virtual environment (optional but recommended):
     ```sh
@@ -22,7 +22,7 @@ This project uses Locust to perform load testing on an endpoint that processes e
 ## Usage
 1. Run Locust:
 
-    ```locust -f emotion.py --host=http://127.0.0.1:5005```
+    ```locust -f load_emotions.py --host=http://127.0.0.1:5005```
 
 2. Open the Locust web interface: 
 Open a web browser and go to http://localhost:8089

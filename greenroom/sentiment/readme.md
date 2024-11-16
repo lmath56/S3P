@@ -84,6 +84,9 @@ To deploy the sentiment analysis service on GKE using Terraform, follow these st
     kubectl get svc
     ``` 
 
+    You will see the Extrernal IP for both `grafana` and `prometheus-server`
+
+
     Prometheus should be configured to scrape metrics from the Kubernetes API server, kubelets, and other components. The default Prometheus Helm chart already includes configurations for scraping Kubernetes metrics.
 
 ## Grafana Setup
@@ -112,15 +115,29 @@ Write-Output $decodedPassword
 
 1. Log in to Grafana: Use the username admin and the retrieved password to log in to Grafana.
 2. Add Prometheus Data Source to Grafana:
-    1. In Grafana, go to Configuration > Data Sources.
+    1. In Grafana, go to Connections > Data Sources.
     2. Click Add data source.
     3. Select Prometheus.
-    4. Set the URL to the Prometheus server's external IP address (e.g., http://<PROMETHEUS_EXTERNAL_IP>:9090).
+    4. Set the URL to the Prometheus server's external IP address (e.g., ``http://<PROMETHEUS_EXTERNAL_IP>``).
     5. Click Save & Test.
 
 #### Import Kubernetes Dashboards
 
 1. In Grafana, go to Create > Import.
-2. You can import pre-built Kubernetes dashboards from the Grafana dashboard repository. For example, you can use the Kubernetes cluster monitoring dashboard with [ID 315](https://grafana.com/grafana/dashboards/315)
+2. You can import pre-built Kubernetes dashboards from the Grafana dashboard repository. For example, you can use the Kubernetes cluster monitoring dashboard with [https://grafana.com/grafana/dashboards/315](https://grafana.com/grafana/dashboards/315)
 3. Enter the dashboard ID `315` and click Load.
 4. Select the Prometheus data source you added earlier and click Import.
+
+
+Some dashboards can be found [here](https://github.com/dotdc/grafana-dashboards-kubernetes) which were made by [David Calvert](https://github.com/dotdc)
+
+| Dashboard                          | ID    |
+|:-----------------------------------|:------|
+| k8s-addons-prometheus.json         | 19105 |
+| k8s-addons-trivy-operator.json     | 16337 |
+| k8s-system-api-server.json         | 15761 |
+| k8s-system-coredns.json            | 15762 |
+| **k8s-views-global.json**          | **15757** |
+| k8s-views-namespaces.json          | 15758 |
+| **k8s-views-nodes.json**           | **15759** |
+| **k8s-views-pods.json**            | **15760** |

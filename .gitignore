@@ -4,7 +4,7 @@ models/
 # Manually added
 .terraform.lock.hcl 
 .vscode/
-requests.txt
+responses.txt
 
 # Local .terraform directories https://github.com/github/gitignore/blob/main/Terraform.gitignore
 **/.terraform/* 

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: greenroom-sentiment
 spec:
-  replicas: 10
+  replicas: 2
   selector:
     matchLabels:
       app: greenroom-sentiment

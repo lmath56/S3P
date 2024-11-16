@@ -1,13 +1,18 @@
 from locust import HttpUser, TaskSet, task, between
 import random
-import string
+import nltk
+from nltk.corpus import words
+
+# Download the words corpus if not already downloaded
+nltk.download('words')
 
 class UserBehavior(TaskSet):
     @task
     def post_request(self):
-        # Generate a random 100-word text
-        words = [''.join(random.choices(string.ascii_lowercase, k=random.randint(3, 10))) for _ in range(100)]
-        story = ' '.join(words)
+        # Generate a random 100-word text using real words
+        word_list = words.words()
+        story = ' '.join(random.choices(word_list, k=100))
+        print(story)
         
         # Send the POST request with the story content
         response = self.client.post("/get-sentiment", json={

@@ -1,11 +1,13 @@
 from locust import HttpUser, TaskSet, task, between
+import random
+import string
 
 class UserBehavior(TaskSet):
     @task
     def post_request(self):
-        # Read the content from text.txt
-        with open('text.txt', 'r', encoding='utf-8') as file:
-            story = file.read()
+        # Generate a random 100-word text
+        words = [''.join(random.choices(string.ascii_lowercase, k=random.randint(3, 10))) for _ in range(100)]
+        story = ' '.join(words)
         
         # Send the POST request with the story content
         response = self.client.post("/get-sentiment", json={

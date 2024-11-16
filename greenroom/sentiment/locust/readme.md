@@ -31,7 +31,7 @@ Open a web browser and go to http://localhost:8089
 
 - Number of total users to simulate
 - Spawn rate (users per second)
-- Set the host. Note that the load_sentiment.py file is already targeting /get-sentiment
+- Set the host i.e. `http://34.147.77.17:8080`. Note that the load_sentiment.py file is already targeting /get-sentiment
 
 4. Start the test:
 Click the "Start swarming" button to begin the load test.

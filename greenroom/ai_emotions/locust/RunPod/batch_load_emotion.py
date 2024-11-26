@@ -11,7 +11,7 @@ class UserBehavior(TaskSet):
     def send_batch_request(self):
         headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer YOUR_API_KEY"
+            "Authorization": "Bearer API_KEY"
         }
         payload = {
             "input": {
@@ -20,7 +20,11 @@ class UserBehavior(TaskSet):
                 "baseline": 0.4
             }
         }
-        self.client.post("/v2/67w2bikl2su578/runsync", json=payload, headers=headers)
+        response = self.client.post("/v2/usu1imk8bfbasw/runsync", json=payload, headers=headers)
+
+        # Save response to responses.txt
+        with open('responses.txt', 'a', encoding='utf-8') as file:
+            file.write(response.text + '\n')
 
 class WebsiteUser(HttpUser):
     tasks = [UserBehavior]

@@ -2,19 +2,14 @@
 
 This project uses Locust to perform load testing on an endpoint that processes emotion analysis.
 
-## Installation
+## Running the load test
 
 1.  Clone the repository:
     ```sh
     git clone <repository-url>
-    cd greenroom\ai_emotions\locust
+    cd greenroom\ai_emotions\locust\VERSION
     ```
-2.  Create a virtual environment (optional but recommended):
-    ```sh
-    python -m venv venv
-    venv\Scripts\activate.ps1
-    ```
-3.  Install Locust
+2.  Install Locust
 
     ```pip install locust```
 

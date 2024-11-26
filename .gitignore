@@ -5,6 +5,7 @@ models/
 .terraform.lock.hcl 
 .vscode/
 responses.txt
+comments.json
 
 # Local .terraform directories https://github.com/github/gitignore/blob/main/Terraform.gitignore
 **/.terraform/* 
